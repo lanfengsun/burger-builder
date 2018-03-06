@@ -11,7 +11,6 @@ class App extends Component {
       <div>
         <Layout>
           <BurgerBuilder />
-          <BuildControls />
         </Layout>
       </div>
     )
