@@ -4,7 +4,7 @@ import Aux from '../../hoc/Auxiliary'
 const layout = (props) => {
     return (
         <Aux>
-            <div>Navigations</div>
+            <h1>Navigations</h1>
             <div>{props.children}</div>
         </Aux>
     );
