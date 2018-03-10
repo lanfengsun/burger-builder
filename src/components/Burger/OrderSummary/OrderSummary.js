@@ -1,5 +1,6 @@
 import React from 'react';
 import Aux from '../../../hoc/Auxiliary';
+import Button from '../../UI/Button/Button';
 
 const orderSummary = (props) => {
     const style = {textTransform: "capitalize"};
@@ -16,6 +17,9 @@ const orderSummary = (props) => {
             <h3>Your Order Summary</h3>
             <p>Here is your delicious burger:</p>
             <ul>{summary}</ul>
+            <p>Do you want to continue?</p>
+            <Button btnType='Danger' clicked={props.orderCancel}>CANCEL</Button>
+            <Button btnType='Success' clicked={props.orderContinue}>CONTINUE</Button>
         </Aux>
     )
 }

@@ -21,7 +21,8 @@ class BurgerBuilder extends Component {
            meat: 0
        },
        totalPrice: 6.6,
-       isPurchasable: false
+       isPurchasable: false,
+       hasOrdered: false
     }
 
     addIngredientHandler = (type) => {
@@ -55,6 +56,18 @@ class BurgerBuilder extends Component {
         this.setState({isPurchasable: total > 0});
     }
 
+    orderHandler = () => {
+        this.setState({hasOrdered: true});
+    }
+
+    orderCancelHandler = () => {
+        this.setState({hasOrdered: false});
+    }
+
+    orderContinueHandler = () => {
+        alert("CONTINUE!");
+    }
+
     render() {
         const disabledBtn = {...this.state.ingredients};
         for (let key in disabledBtn) {
@@ -63,8 +76,11 @@ class BurgerBuilder extends Component {
 
         return (
             <Aux>
-                <Modal>
-                    <OrderSummary ingredients={this.state.ingredients} />
+                <Modal show={this.state.hasOrdered} hide={this.orderCancelHandler} >
+                    <OrderSummary 
+                        ingredients={this.state.ingredients}
+                        orderContinue={this.orderContinueHandler}
+                        orderCancel={this.orderCancelHandler} />
                 </Modal>
                 <Burger ingredients={this.state.ingredients} />
                 <BuildControls 
@@ -72,7 +88,8 @@ class BurgerBuilder extends Component {
                     remove={this.removeIngredientHandler}
                     price={this.state.totalPrice}
                     disable={disabledBtn}
-                    purchasable={this.state.isPurchasable} />
+                    purchasable={this.state.isPurchasable}
+                    order={this.orderHandler} />
             </Aux>
         )
     }
