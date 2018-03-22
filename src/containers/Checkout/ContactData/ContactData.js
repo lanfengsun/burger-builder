@@ -1,16 +1,51 @@
 import React, { Component } from 'react';
 import Button from '../../../components/UI/Button/Button';
 import Spinner from '../../../components/UI/Spinner/Spinner';
+import Input from '../../../components/UI/Input/Input';
 import classes from './ContactData.css';
 import axios from '../../../axios-orders';
 
 class ContactData extends Component {
     state = {
-        name: '',
-        email: '',
-        address: {
-            street: '',
-            postalCode: ''
+        formElems: {
+            name: {
+                elemType: 'input',
+                elemConfig: {
+                    type: 'text',
+                    name: 'name',
+                    placeholder: 'Your Name'
+                }
+            },
+            email: {
+                elemType: 'input',
+                elemConfig: {
+                    type: 'email',
+                    name: 'email',
+                    placeholder: 'Your Email'
+                }
+            },
+            address: {
+                elemType: 'input',
+                elemConfig: {
+                    type: 'text',
+                    name: 'address',
+                    placeholder: 'Your Address'
+                }
+            },
+            postalCode: {
+                elemType: 'input',
+                elemConfig: {
+                    type: 'text',
+                    name: 'postalcode',
+                    placeholder: 'Your Postal Code'
+                }
+            },
+            delivery: {
+                elemType: 'select',
+                elemConfig: {
+                    options: ['Normal', 'Express']
+                }
+            }
         },
         loading: false
     };
@@ -43,12 +78,20 @@ class ContactData extends Component {
     }
 
     render () {
+        const formElemsArray = [];
+        for (let elem in this.state.formElems) {
+            formElemsArray.push({
+                key: elem,
+                type: this.state.formElems[elem].elemType,
+                config: this.state.formElems[elem].elemConfig
+            });
+        }
+
         let form = (
             <form>
-                <input type='text' name='name' placeholder='Your Name' />
-                <input type='email' name='email' placeholder='Your Email' />
-                <input type='text' name='street' placeholder='Your Street' />
-                <input type='text' name='post' placeholder='Your Postal Code' />
+                {formElemsArray.map(elem => (
+                    <Input key={elem.key} inputtype={elem.type} {...elem.config} />
+                ))}
                 <Button btnType='Success' clicked={this.orderHandler}>ORDER</Button>
             </form>
         );
