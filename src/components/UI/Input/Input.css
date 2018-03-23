@@ -8,6 +8,8 @@
     font-weight: bold;
     display: block;
     margin-bottom: 8px;
+    text-transform: capitalize;
+    text-align: left;
 }
 
 .InputElem {
@@ -24,4 +26,14 @@
 .InputElem:focus {
     outline: none;
     background: #fcebc9;
+}
+
+.Invalid {
+    border: 1px solid red;
+}
+
+.InvalidString {
+    color: red;
+    text-align: left;
+    font-size: 0.8em;
 }
