@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import Button from '../../../components/UI/Button/Button';
 import Spinner from '../../../components/UI/Spinner/Spinner';
 import Input from '../../../components/UI/Input/Input';
@@ -105,17 +106,19 @@ class ContactData extends Component {
     }
 
     validate = (value, validation) => {
+        if (!validation) return true;
+
         let isValid = true;
 
-        if (validation && validation.required) {
+        if (validation.required) {
             isValid = value.trim() !== '' && isValid;
         }
 
-        if(validation && validation.minLength) {
+        if(validation.minLength) {
             isValid = value.length >= validation.minLength && isValid;
         }
 
-        if(validation && validation.maxLength) {
+        if(validation.maxLength) {
             isValid = value.length <= validation.maxLength && isValid;
         }
 
@@ -186,4 +189,9 @@ class ContactData extends Component {
     }
 }
 
-export default ContactData;
+const mapStateToProps = state => ({
+    ingredients: state.ingredients,
+    price: state.totalPrice
+});
+
+export default connect(mapStateToProps)(ContactData);
