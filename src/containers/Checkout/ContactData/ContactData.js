@@ -144,8 +144,6 @@ class ContactData extends Component {
                 break;
             }
         }
-        console.log(newFormElems, isFormValid)
-
         this.setState({formElems: newFormElems, isFormValid: isFormValid});
     }
 

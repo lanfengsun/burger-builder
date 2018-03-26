@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import * as actionTypes from '../../store/actions';
+import * as actions from '../../store/actions/index';
 import Aux from '../../hoc/Auxiliary/Auxiliary';
 import Burger from '../../components/Burger/Burger';
 import BuildControls from '../../components/Burger/BuildControls/BuildControls';
@@ -13,17 +13,12 @@ import axios from '../../axios-orders';
 class BurgerBuilder extends Component {
     state = {
        hasOrdered: false,
-       loading: false,
-       error: false
+       loading: false
     }
 
-    // componentDidMount = () => {
-    //     axios.get('/ingredients.json').then(res => {
-    //         this.setState({ ingredients: res.data });
-    //     }).catch(res => {
-    //         this.setState({ error: true });
-    //     });
-    // }
+    componentDidMount = () => {
+        this.props.onInitIngredients();
+    }
 
     isPurchasable = () => {
         const total = Object.values(this.props.ingredients).reduce((sum, num) => (sum + num), 0);
@@ -48,7 +43,7 @@ class BurgerBuilder extends Component {
             disabledBtn[key] = disabledBtn[key] <= 0;
         }
 
-        let burger = this.state.error ? <p>Cannot Fetch Ingredients...</p> : <Spinner />;
+        let burger = this.props.error ? <p>Cannot Fetch Ingredients...</p> : <Spinner />;
         let orderSummary = null;
 
         if (this.props.ingredients) {
@@ -89,12 +84,14 @@ class BurgerBuilder extends Component {
 
 const mapStateToProps = state => ({
     ingredients: state.ingredients,
-    price: state.totalPrice
+    price: state.totalPrice,
+    error: state.error
 });
 
 const mapDispatchToProps = dispatch => ({
-    onAddIngredient: (ing) => dispatch({type: actionTypes.ADD_INGREDIENT, ing: ing}),
-    onRemoveIngredient: (ing) => dispatch({type: actionTypes.REMOVE_INGREDIENT, ing: ing})
+    onAddIngredient: (ing) => dispatch(actions.addIngredient(ing)),
+    onRemoveIngredient: (ing) => dispatch(actions.removeIngredient(ing)),
+    onInitIngredients: () => dispatch(actions.initIngredients())
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(withErrorHandler(BurgerBuilder, axios));
