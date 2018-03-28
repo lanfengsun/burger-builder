@@ -11,3 +11,7 @@ export const ORDER_POSTED = 'ORDER_POSTED';
 export const FETCH_ORDERS_START = 'FETCH_ORDERS_START';
 export const FETCH_ORDERS_DONE = "FETCH_ORDERS_DONE";
 export const FETCH_ORDERS_FAILED = 'FETCH_ORDERS_FAILED';
+
+export const AUTH_START = 'AUTH_START';
+export const AUTH_SUCCESS = 'AUTH_SUCCESS';
+export const AUTH_FAIL = 'AUTH_FAIL';

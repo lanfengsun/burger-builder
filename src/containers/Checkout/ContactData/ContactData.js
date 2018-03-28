@@ -34,7 +34,8 @@ class ContactData extends Component {
                     value: ''
                 },
                 validation: {
-                    required: true
+                    required: true,
+                    isEmail: true
                 },
                 isValid: false,
                 touched: false
@@ -66,7 +67,8 @@ class ContactData extends Component {
                     minLength: 5
                 },
                 isValid: false,
-                touched: false
+                touched: false,
+                invalidString: 'Postal Code must contain at least 5 digits'
             },
             delivery: {
                 elemType: 'select',
@@ -113,6 +115,14 @@ class ContactData extends Component {
             isValid = value.length <= validation.maxLength && isValid;
         }
 
+        if (validation.isEmail) {
+            isValid = value.match(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/) && isValid;
+        }
+
+        if (validation.isNumeric) {
+            isValid = value.match(/^\d+$/) && isValid;
+        }
+
         return isValid;
     }
 
@@ -146,7 +156,8 @@ class ContactData extends Component {
                 key: elem,
                 type: cur.elemType,
                 config: cur.elemConfig,
-                valid: cur.validation ? !cur.touched || cur.isValid : true
+                valid: cur.validation ? !cur.touched || cur.isValid : true,
+                invalidString: cur.invalidString
             });
         }
 
@@ -159,7 +170,8 @@ class ContactData extends Component {
                         inputtype={elem.type}
                         config={{...elem.config}}
                         change={(event) => this.inputChangeHandler(event, elem.key)}
-                        valid={elem.valid} />
+                        valid={elem.valid}
+                        invalidString={elem.invalidString} />
                 ))}
                 <Button btnType='Success' disabled={!this.state.isFormValid}>ORDER</Button>
             </form>

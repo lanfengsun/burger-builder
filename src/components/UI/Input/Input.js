@@ -8,7 +8,9 @@ const input = (props) => {
 
     if (!props.valid) {
         inputClass.push(classes.Invalid);
-        invalidString = <p className={classes.InvalidString}>Please enter a valid {props.label}</p>;
+        invalidString = props.invalidString ? 
+                        <p className={classes.InvalidString}>{props.invalidString}</p>: 
+                        <p className={classes.InvalidString}>Please enter a valid {props.label}</p>;
     }
 
     switch(props.inputtype) {
