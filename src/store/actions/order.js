@@ -16,6 +16,21 @@ const orderPosted = () => ({
     type: actionTypes.ORDER_POSTED
 });
 
+const fetchOrdersStart = () => ({
+    type: actionTypes.FETCH_ORDERS_START
+});
+
+
+const fetchOrdersDone = orders => ({
+    type: actionTypes.FETCH_ORDERS_DONE,
+    orders: orders
+});
+
+const fetchOrdersFailed = error => ({
+    type: actionTypes.FETCH_ORDERS_FAILED,
+    error: error
+});
+
 export const orderInit = () => ({
     type: actionTypes.ORDER_INIT
 });
@@ -31,5 +46,26 @@ export const placeOrder = order => {
             .catch(err => {
                 dispatch(orderBurgerFailed(err));
             });
+    }
+}
+
+export const fetchOrders = () => {
+    return dispatch => {
+        dispatch(fetchOrdersStart());
+        axios.get("orders.json")
+          .then(res => {
+            const orders = [];
+            for (let key in res.data) {
+              orders.push({
+                key: key,
+                ingredients: res.data[key].ingredients,
+                price: res.data[key].price.toFixed(2)
+              });
+            }
+            dispatch(fetchOrdersDone(orders));
+          })
+          .catch(err => {
+            dispatch(fetchOrdersFailed(err));
+          });
     }
 }
