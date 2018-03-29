@@ -95,7 +95,7 @@ class ContactData extends Component {
             customer: customer
         };
 
-        this.props.onPlaceOrder(order);
+        this.props.onPlaceOrder(order, this.props.token);
     }
 
     validate = (value, validation) => {
@@ -193,11 +193,12 @@ class ContactData extends Component {
 const mapStateToProps = state => ({
     ingredients: state.burger.ingredients,
     price: state.burger.totalPrice,
-    loading: state.order.loading
+    loading: state.order.loading,
+    token: state.auth.token
 });
 
 const mapDispatchToProps = dispatch => ({
-    onPlaceOrder: (order) => dispatch(actions.placeOrder(order))
+    onPlaceOrder: (order, token) => dispatch(actions.placeOrder(order, token))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(withErrorHandler(ContactData, axios));

@@ -4,6 +4,7 @@ import * as actions from '../../store/actions/index';
 import Input from '../../components/UI/Input/Input';
 import Button from '../../components/UI/Button/Button';
 import Spinner from '../../components/UI/Spinner/Spinner';
+import Aux from '../../hoc/Auxiliary/Auxiliary';
 import classes from './Auth.css';
 
 class Auth extends Component {
@@ -117,27 +118,29 @@ class Auth extends Component {
 
         let err = null;
         if (this.props.error) {
-            err = <p className={classes.Error}>Something Went Wrong...</p>
+            err = <p className={classes.Error}>{this.props.error.message}</p>
         }
 
         let form = (
-            <form onSubmit={this.authHandler}>
-                {formElemsArray.map(elem => (
-                    <Input
-                        key={elem.key}
-                        label={elem.key}
-                        inputtype={elem.type}
-                        config={{ ...elem.config }}
-                        change={(event) => this.inputChangeHandler(event, elem.key)}
-                        valid={elem.valid}
-                        invalidString={elem.invalidString} />
-                ))}
-                
+            <Aux>
+                <form onSubmit={this.authHandler}>
+                    {formElemsArray.map(elem => (
+                        <Input
+                            key={elem.key}
+                            label={elem.key}
+                            inputtype={elem.type}
+                            config={{ ...elem.config }}
+                            change={(event) => this.inputChangeHandler(event, elem.key)}
+                            valid={elem.valid}
+                            invalidString={elem.invalidString} />
+                    ))}
+                    {err}
+                    <Button btnType='Success'>{this.state.isSignUp ? 'Sign Up' : 'Login'}</Button>
+                </form>
                 <Button btnType='Danger' clicked={this.switchModeHandler}>
                     Switch to {this.state.isSignUp ? 'Login' : 'Sign Up'}
                 </Button>
-                <Button btnType='Success'>{this.state.isSignUp ? 'Sign Up' : 'Login'}</Button>
-            </form>
+            </Aux>
         );
 
         if (this.props.loading) {
@@ -148,7 +151,6 @@ class Auth extends Component {
             <div className={classes.Auth}>
                 <h3>{this.state.isSignUp ? 'Sign Up' : 'Login'}</h3>
                 {form}
-                {err}
             </div>
         );
     }

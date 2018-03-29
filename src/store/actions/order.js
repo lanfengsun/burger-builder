@@ -35,10 +35,10 @@ export const orderInit = () => ({
     type: actionTypes.ORDER_INIT
 });
 
-export const placeOrder = order => {
+export const placeOrder = (order, token) => {
     return dispatch => {
         dispatch(orderPosted());
-        axios.post('/orders.json', order)
+        axios.post('/orders.json?auth=' + token, order)
             .then(res => {
                 console.log(res);
                 dispatch(orderBurger(order, res.data.name));
@@ -49,10 +49,10 @@ export const placeOrder = order => {
     }
 }
 
-export const fetchOrders = () => {
+export const fetchOrders = (token) => {
     return dispatch => {
         dispatch(fetchOrdersStart());
-        axios.get("orders.json")
+        axios.get("orders.json?auth=" + token)
           .then(res => {
             const orders = [];
             for (let key in res.data) {
