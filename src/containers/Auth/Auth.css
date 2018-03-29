@@ -13,3 +13,8 @@
         width: 500px;
     }
 }
+
+.Error {
+    color: red;
+    text-align: center;
+}
