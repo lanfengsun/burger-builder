@@ -92,7 +92,8 @@ class ContactData extends Component {
         const order = {
             ingredients: this.props.ingredients,
             price: this.props.price,
-            customer: customer
+            customer: customer,
+            userID: this.props.userID
         };
 
         this.props.onPlaceOrder(order, this.props.token);
@@ -194,7 +195,8 @@ const mapStateToProps = state => ({
     ingredients: state.burger.ingredients,
     price: state.burger.totalPrice,
     loading: state.order.loading,
-    token: state.auth.token
+    token: state.auth.token,
+    userID: state.auth.userID
 });
 
 const mapDispatchToProps = dispatch => ({

@@ -12,5 +12,6 @@ export {
 
 export {
     auth,
-    logout
+    logout,
+    checkAuthExpire
 } from './auth';

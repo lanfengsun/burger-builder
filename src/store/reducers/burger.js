@@ -13,7 +13,8 @@ const BASE_PRICE = 6.6;
 const initialState = {
     ingredients: null,
     totalPrice: null,
-    error: false
+    error: false,
+    isBuilding: false
 };
 
 const changeIngredient = (state, action, amount) => {
@@ -22,7 +23,8 @@ const changeIngredient = (state, action, amount) => {
     });
     const newState = {
         ingredients: newIngredients,
-        totalPrice: state.totalPrice + INGREDIENT_PRICES[action.ing] * amount
+        totalPrice: state.totalPrice + INGREDIENT_PRICES[action.ing] * amount,
+        isBuilding: true
     };
     return updateObject(state, newState);
 }
@@ -35,7 +37,8 @@ const fetchIngredients = (state, action) => {
     return updateObject(state, {
         ingredients: action.ingredients,
         totalPrice: BASE_PRICE,
-        error: false
+        error: false,
+        isBuilding: false
     });
 }
 

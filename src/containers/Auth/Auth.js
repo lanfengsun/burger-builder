@@ -124,7 +124,11 @@ class Auth extends Component {
 
         let redirect = null;
         if (this.props.isAuthenticated) {
-            redirect = <Redirect to='/' />
+            if (this.props.isBuilding) {
+                redirect = <Redirect to='/checkout' />;
+            } else {
+                redirect = <Redirect to="/" />;
+            }
         }
 
         let form = (
@@ -166,7 +170,8 @@ class Auth extends Component {
 const mapStateToProps = state => ({
     error: state.auth.error,
     loading: state.auth.loading,
-    isAuthenticated: state.auth.token !== null
+    isAuthenticated: state.auth.token !== null,
+    isBuilding: state.burger.isBuilding
 });
 
 const mapDispatchToProps = dispatch => ({
