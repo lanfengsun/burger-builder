@@ -7,6 +7,7 @@ import Button from '../../components/UI/Button/Button';
 import Spinner from '../../components/UI/Spinner/Spinner';
 import Aux from '../../hoc/Auxiliary/Auxiliary';
 import classes from './Auth.css';
+import { validate, updateObject } from '../../shared/utility';
 
 class Auth extends Component {
     state = {
@@ -46,47 +47,22 @@ class Auth extends Component {
         isSignUp: true
     }
 
-    validate = (value, validation) => {
-        if (!validation) return true;
-
-        let isValid = true;
-
-        if (validation.required) {
-            isValid = value.trim() !== '' && isValid;
+    componentDidMount() {
+        if (!this.props.isBuilding && this.props.authRedirect === '/checkout') {
+            this.props.setAuthRedirect('/');
         }
-
-        if (validation.minLength) {
-            isValid = value.length >= validation.minLength && isValid;
-        }
-
-        if (validation.maxLength) {
-            isValid = value.length <= validation.maxLength && isValid;
-        }
-
-        if (validation.isEmail) {
-            isValid = value.match(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/) && isValid;
-        }
-
-        if (validation.isNumeric) {
-            isValid = value.match(/^\d+$/) && isValid;
-        }
-
-        return isValid;
     }
 
     inputChangeHandler = (event, elem) => {
-        const newControls = {
-            ...this.state.controls,
-            [elem]: {
-                ...this.state.controls[elem],
-                elemConfig: {
-                    ...this.state.controls[elem].elemConfig,
+        const newControls = updateObject(this.state.controls, {
+            [elem]: updateObject(this.state.controls[elem], {
+                elemConfig: updateObject(this.state.controls[elem].elemConfig, {
                     value: event.target.value
-                },
+                }),
                 touched: true,
-                isValid: this.validate(event.target.value, this.state.controls[elem].validation)
-            }
-        };
+                isValid: validate(event.target.value, this.state.controls[elem].validation)
+            })
+        });
 
         this.setState({controls: newControls});
     }
@@ -124,11 +100,8 @@ class Auth extends Component {
 
         let redirect = null;
         if (this.props.isAuthenticated) {
-            if (this.props.isBuilding) {
-                redirect = <Redirect to='/checkout' />;
-            } else {
-                redirect = <Redirect to="/" />;
-            }
+            redirect = <Redirect to={this.props.authRedirect} />;
+            
         }
 
         let form = (
@@ -171,11 +144,13 @@ const mapStateToProps = state => ({
     error: state.auth.error,
     loading: state.auth.loading,
     isAuthenticated: state.auth.token !== null,
-    isBuilding: state.burger.isBuilding
+    isBuilding: state.burger.isBuilding,
+    authRedirect: state.auth.authRedirect
 });
 
 const mapDispatchToProps = dispatch => ({
-    onAuth: (email, password, isSignUp) => dispatch(actions.auth(email, password, isSignUp))
+    onAuth: (email, password, isSignUp) => dispatch(actions.auth(email, password, isSignUp)),
+    onSetAuthRedirect: (path) => dispatch(actions.setAuthRedirect(path))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Auth);

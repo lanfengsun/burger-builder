@@ -40,7 +40,6 @@ export const placeOrder = (order, token) => {
         dispatch(orderPosted());
         axios.post('/orders.json?auth=' + token, order)
             .then(res => {
-                console.log(res);
                 dispatch(orderBurger(order, res.data.name));
             })
             .catch(err => {

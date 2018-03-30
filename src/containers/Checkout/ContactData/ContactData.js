@@ -7,6 +7,7 @@ import classes from './ContactData.css';
 import axios from '../../../axios-orders';
 import withErrorHandler from '../../../hoc/withErrorHandler/withErrorHandler';
 import * as actions from '../../../store/actions/index';
+import { validate, updateObject } from '../../../shared/utility';
 
 class ContactData extends Component {
     state = {
@@ -99,45 +100,17 @@ class ContactData extends Component {
         this.props.onPlaceOrder(order, this.props.token);
     }
 
-    validate = (value, validation) => {
-        if (!validation) return true;
-
-        let isValid = true;
-
-        if (validation.required) {
-            isValid = value.trim() !== '' && isValid;
-        }
-
-        if(validation.minLength) {
-            isValid = value.length >= validation.minLength && isValid;
-        }
-
-        if(validation.maxLength) {
-            isValid = value.length <= validation.maxLength && isValid;
-        }
-
-        if (validation.isEmail) {
-            isValid = value.match(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/) && isValid;
-        }
-
-        if (validation.isNumeric) {
-            isValid = value.match(/^\d+$/) && isValid;
-        }
-
-        return isValid;
-    }
 
     inputChangeHandler = (event, elem) => {
-        // deep copy elemConfig
-        const newFormElems = {...this.state.formElems};
-        const newFormElem = {...this.state.formElems[elem]};
-        const newFormElemConfig = {...this.state.formElems[elem].elemConfig};
-
-        newFormElemConfig.value = event.target.value;
-        newFormElem.isValid = this.validate(newFormElemConfig.value, newFormElem.validation);
-        if (newFormElem.validation) newFormElem.touched = true;
-        newFormElem.elemConfig = newFormElemConfig;
-        newFormElems[elem] = newFormElem;
+        const newFormElems = updateObject(this.state.formElems, {
+            [elem]: updateObject(this.state.formElems[elem], {
+                elemConfig: updateObject(this.state.formElems[elem].elemConfig, {
+                    value: event.target.value
+                }),
+                touched: true,
+                isValid: validate(event.target.value, this.state.formElems[elem].validation)
+            })
+        });
 
         let isFormValid = true;
         for (elem in newFormElems) {
