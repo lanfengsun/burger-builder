@@ -1,12 +1,12 @@
 import * as actionTypes from './actionTypes';
-import axios from '../../axios-orders';
 
-const fetchIngredients = (ingredients) => ({
+
+export const fetchIngredients = (ingredients) => ({
     type: actionTypes.FETCH_INGREDIENTS,
     ingredients: ingredients
 });
 
-const fetchIngredientsFailed = () => ({
+export const fetchIngredientsFailed = () => ({
     type: actionTypes.FETCH_INGREDIENTS_FAILED
 });
 
@@ -20,12 +20,6 @@ export const removeIngredient = (ing) => ({
     ing: ing
 });
 
-export const initIngredients = () => {
-    return dispatch => {
-        axios.get('/ingredients.json').then(res => {
-            dispatch(fetchIngredients(res.data));
-        }).catch(res => {
-            dispatch(fetchIngredientsFailed());
-        });
-    }
-};
+export const initIngredients = () => ({
+    type: actionTypes.INIT_INGREDIENTS
+});

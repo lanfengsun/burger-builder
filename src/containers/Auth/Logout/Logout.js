@@ -14,7 +14,7 @@ class Logout extends Component {
 }
 
 const mapDispatchToProps = dispatch => ({
-    onLogout: () => dispatch(actions.logout())
+    onLogout: () => dispatch(actions.initLogout())
 });
 
 export default connect(null, mapDispatchToProps)(Logout);
